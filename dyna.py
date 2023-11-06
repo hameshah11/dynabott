@@ -4,7 +4,7 @@ import pandas as pd
 
 
 # Initialize the OpenAI API key
-openai.api_key = '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'
+openai.api_key = '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'
 
 # Classes and Trainers Data as before
 # Classes Data
