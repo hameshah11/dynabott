@@ -1,0 +1,4 @@
+streamlit
+openai
+pandas
+# any other libraries you're using
