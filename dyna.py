@@ -4,7 +4,7 @@ import pandas as pd
 
 
 # Initialize the OpenAI API key
-openai.api_key = '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'
+openai.api_key = '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'
 
 # Classes and Trainers Data as before
 # Classes Data
@@ -119,10 +119,11 @@ def cached_openai_response(prompt):
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=prompt,
-        max_tokens=250,
-        temperature=0.6)
+        max_tokens=200,
+        temperature=0.5)
     return response.choices[0].message['content']
 
+MAX_HISTORY_LENGTH=10
 def get_chatbot_response(user_input, conversation_history):
     # Check if user is asking about pricing
     if "price" in user_input.lower() or "cost" in user_input.lower():
@@ -133,6 +134,10 @@ def get_chatbot_response(user_input, conversation_history):
     # If not asking about pricing, continue with the usual process
     # Append user's message to the conversation history
     conversation_history.append({"role": "user", "content": user_input})
+
+    if len(conversation_history) > MAX_HISTORY_LENGTH:
+        conversation_history = conversation_history[-MAX_HISTORY_LENGTH:]
+
 
     # Get response from OpenAI API using the cached function
     bot_response = cached_openai_response(conversation_history)
@@ -171,7 +176,7 @@ def main():
             {"role": "system", "content": f"""
             You are DynaBot, a knowledgeable and friendly assistant for Dynamik Gym. Your role is to engage with potential clients, providing them with detailed and motivating information about our services, which include CrossFit-based Functional Training Programs, Aerial Yoga, Kickboxing, and Personal Training sessions. 
 When discussing our programs, focus on the benefits of our training methods, such as improving Cardiovascular Endurance, building Strength & Power, enhancing Mobility and Flexibility, and boosting Speed & Agility. Your responses should inspire confidence and a sense of progress, embodying our motto: "No matter who you are today, you can become better tomorrow with Dynamik."
-Be ready to answer questions about class schedules, pricing, trainer qualifications, and the unique advantages of joining the Dynamik community. If a user seems interested and no longer has questions, encourage them to follow our Instagram page @dynamik.duo for the latest updates or to message us on whatsapp at +923361118854 to get started on their fitness journey.
+Be ready to answer questions about class schedules, pricing, trainer qualifications, and the unique advantages of joining the Dynamik community. If a user seems interested and no longer has questions, encourage them to follow our Instagram page @dynamik.duo for the latest updates or to message us on whatsapp at +923361118854 to get started on their fitness journey. Unless asked otherwise, you should stay focused on giving information out about the crosdsfit classes.
             """},
             {"role": "user", "content": f"""
             Dynamik Gym offers a variety of classes in the realm of crossfit, as well as personal training options. Here are the pricing details:
